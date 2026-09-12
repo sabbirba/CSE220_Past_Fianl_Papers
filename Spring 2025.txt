@@ -1,0 +1,69 @@
+// QUESTION 3: second_max
+// ==========================================
+    static int second_max(BTNode root) {
+        // TODO: Write your implementation here
+        int[] arr = new int[2];
+        arr[0] = root.elem;
+        arr[1] = root.left.elem;
+        second_max_helper(root, arr);
+        return arr[0];
+    }
+    static void second_max_helper(BTNode root, int[] arr){
+        if(root == null){
+            return;
+        }
+        else{
+            if(root.elem > arr[1] && root.elem > arr[0]){
+                arr[1] = root.elem;
+            }
+            else if(root.elem < arr[1] && root.elem > arr[0]){
+                arr[0] = root.elem;
+            }
+            second_max_helper(root.left, arr);
+            second_max_helper(root.right, arr);
+        }
+    }
+
+// QUESTION 4: priority_task
+// ==========================================
+    static int getIndex(int[] arr, int val) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == val) return i;
+        }
+        return -1;
+    }
+
+    static void priority_task(int[] tasks) {
+        // TODO: Write your implementation here
+        MinHeap h = new MinHeap();
+        for(int i = 0; i < tasks.length; i++){
+            h.insert(tasks[i]);
+        }
+        for(int i = 0; i < tasks.length; i++){
+            System.out.println("Step "+(i+1)+" - Task "+(getIndex(tasks, h.extract())+1));
+        }
+    }
+
+// QUESTION 5: find_minimum
+// ==========================================
+    static String find_minimum(Edge[] graph) {
+        // TODO: Write your implementation here
+        int[] incomingTraffic = new int[graph.length];
+        for(int i = 0; i < graph.length; i++){
+            Edge p = graph[i];
+            while(p != null){
+                incomingTraffic[Integer.parseInt(p.destination)] += p.weight;
+                p = p.next;
+            }
+        }
+        int min = incomingTraffic[0];
+        int index = 0;
+        for(int i = 0; i < graph.length; i++){
+            if(incomingTraffic[i] < min){
+                min = incomingTraffic[i];
+                index = i;
+            }
+        }
+        String ans = ""+index;
+        return ans;
+    }

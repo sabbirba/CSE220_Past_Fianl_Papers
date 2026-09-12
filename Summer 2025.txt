@@ -1,0 +1,62 @@
+// QUESTION 3: findPath
+// ==========================================
+static String findPath(TreeNode root, int[] seq, int i){
+        if(root == null || i >= seq.length) return "LOST";
+        if(root.elem != seq[i]) return "LOST";
+        if(i == seq.length - 1){
+            //jodi leaf na hoi atkai geso bhaia
+            if(root.left == null && root.right == null) return "ESCAPED";
+            else return "TRAPPED";
+        }
+        String r1 = findPathHelper(root.left, seq, i+1);
+        String r2 = findPathHelper(root.right, seq, i+1);
+        if(r1.equals("ESCAPED") || r2.equals("ESCAPED")) return "ESCAPED";
+        if(r1.equals("TRAPPED") || r2.equals("TRAPPED")) return "TRAPPED";
+        return "LOST";
+    }
+
+// QUESTION 4: urgent_task
+// ==========================================
+    static void urgent_task(int[] tasks, int deadline) {
+        // TODO: Write your implementation here
+        MaxHeap h = new MaxHeap();
+        for(int i = 0; i < tasks.length; i++){
+            h.insert(tasks[i]);
+        }
+        int completed = 0;
+        for(int i = 0; i < deadline; i++){
+            if(h.isEmpty() != true){
+                System.out.println("Day "+(i+1)+" - Urgency "+h.extract());
+                completed++;
+            }
+            
+        }
+        System.out.println("Tasks completed: "+completed);
+        System.out.println("Tasks ignored: "+(tasks.length-completed));
+    }
+
+// QUESTION 6: Max_Mutuals
+// ==========================================
+public static void maxMutual(int[][] g, String[] mapper) {
+        // Your logic goes here
+        int len = mapper.length;
+        int[] mutualPAIR = new int[2];
+        int newMax = 0;
+        for(int i = 0; i < len; i++){
+            for(int j = i+1; j < len; j++){
+                int max = 0;
+                for(int k = 0; k < len; k++){
+                    if(g[i][k] == 1 && g[j][k] == 1){
+                        max++;
+                    }
+                }
+                if(max>newMax){
+                    newMax = max;
+                    mutualPAIR[0] = i;
+                    mutualPAIR[1] = j;
+                }
+            }
+        }
+
+        System.out.println(mapper[mutualPAIR[0]] + " and " + mapper[mutualPAIR[1]] + " have " + newMax + " mutual friends(s).");
+    }

@@ -1,0 +1,88 @@
+// QUESTION 2: outerInnerSum
+// ==========================================
+    static void outerInnerSum(BTNode root) {
+        // TODO: Write your implementation here
+        int sum = sum(root);
+        //figure out inner sum
+        //left side
+        int innerSum = 0;
+        BTNode L = root.left;
+        while(L != null && L.left != null && L.left.left != null){
+            innerSum += innerSumHelper(L.right);
+            L = L.left;
+        }
+        //right side
+        BTNode R = root.right;
+        while(R != null && R.right != null && R.right.right != null){
+            innerSum += innerSumHelper(R.left);
+            R = R.right;
+        }
+        System.out.println("Exterior: " + (sum-innerSum));
+        System.out.println("Interior: " + (innerSum));
+    }
+    static int innerSumHelper(BTNode root){
+        if(root.left == null){
+            return 0;
+        }
+        else{
+            return root.elem + innerSumHelper(root.left) + innerSumHelper(root.right);
+        }
+    }
+    static int sum(BTNode root){
+        if(root.left == null){
+            return root.elem;
+        }
+        else{
+            return root.elem + sum(root.left) + sum(root.right);
+        }
+    }
+
+// QUESTION 4: scanMaxInGroup
+// ==========================================
+    static int[] scanMaxInGroup(int[] numbers, int k) {
+        // TODO: Write your implementation here using MaxHeap."
+        int length = numbers.length;
+        MaxHeap h = new MaxHeap();
+        int len = 0;
+        for(int i = 0; i < length - k + 1; i++){
+            int max = numbers[i];
+            for(int j = i; j < (i+k); j++){
+                if(max<numbers[j]){
+                    max = numbers[j];
+                }
+            }
+            h.insert(max);
+            len++;
+        }
+        
+        int[] vals = new int[len];
+        for(int i = 0; i < len; i++){
+            vals[len-i-1] = h.extract();
+        }
+        return vals;
+    }
+
+// QUESTION 5: networkCheck
+// ==========================================
+    static int[][] networkCheck(Edge[] network) {
+        // TODO: Write your implementation here
+        int len = network.length;
+        int[][] result = new int[len][2];
+        for(int i = 0; i < len; i++){
+            Edge n = network[i];
+            while(n != null){
+                 result[n.destination][0]++;
+                 result[i][1]++;
+                 n = n.next;
+            }
+        }
+        boolean flag = true;
+        for(int i = 0; i < len; i++){
+            if(result[i][0] != result[i][1]){
+                flag = !flag;
+            }
+        }
+        if(flag) System.out.println("Regular graph");
+        else System.out.println("Not regular graph");
+        return result;
+    }

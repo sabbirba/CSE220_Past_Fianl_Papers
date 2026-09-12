@@ -1,0 +1,94 @@
+// QUESTION 2: mutatingVirus
+// ==========================================
+    static BtNode mutatingVirus(BtNode root) {
+        // TODO: Write your implementation here
+        if(root == null){
+            return null;
+        }
+        if((root.left != null && root.right == null && root.elem % 2 != 0) || (root.left == null && root.right != null && root.elem % 2 != 0)){
+            root.elem = MVHelperSum(root);
+            root.right = root.left = null;
+        }
+        else{
+            mutatingVirus(root.right);
+            mutatingVirus(root.left);
+        }
+        return root;
+    }
+    static int MVHelperSum(BtNode root) {
+        // TODO: Write your implementation here
+        if(root == null){
+            return 0;
+        }
+        return root.elem + MVHelperSum(root.left) + MVHelperSum(root.right);
+        
+    }
+
+// QUESTION 3: searchBSTArr
+// ==========================================
+    static void searchBSTArr(int[] arr, int target) {
+        // TODO: Write your implementation here
+        int i = 1;
+        while(i < arr.length){
+            System.out.print(arr[i]);
+            if(arr[i] == target){
+                break;
+            }
+            else if(arr[i] < target){
+                i = i*2 + 1;
+            }
+            else if(arr[i] > target){
+                i = i*2;
+            }
+            System.out.print(", ");
+        }
+        if(i >= arr.length){
+            System.out.print("Not_Found");
+        }
+    }
+
+// QUESTION 4: evenMax
+// ==========================================
+    static MaxHeap evenMax(MaxHeap heap) {
+        // TODO: Write your implementation here
+        int discarded = 0;
+        MaxHeap tempHeap = new MaxHeap(heap.getSize());
+        while(heap.getSize() > 0){
+            int temp = heap.extractMax();
+            if(temp % 2 == 0){
+                tempHeap.insert(temp);
+                continue;
+            }
+            discarded++;
+        }
+        while(tempHeap.getSize() > 0){
+            heap.insert(tempHeap.extractMax());
+        }
+        System.out.println("Discarded: "+discarded);
+        return heap;
+    }
+
+// QUESTION 5: richestVertex
+// ==========================================
+    static void richestVertex(Edge[] transaction) {
+        // TODO: Write your implementation here
+        int[] val = new int[transaction.length];
+        for(int i = 0; i < transaction.length; i++){
+            Edge temp = transaction[i];
+            while(temp != null){
+                val[i] -= temp.weight;
+                val[temp.toVertex] += temp.weight;
+                temp = temp.next;
+            }
+        }
+        int index = -1;
+        int riches = 0;
+        for(int i = 0; i < val.length; i++){
+            if(val[i] > riches){
+                riches = val[i];
+                index = i;
+            }
+        }
+        System.out.println("Account with highest money vertex: " + index);
+        System.out.println("Highest net money: " + riches);
+    }

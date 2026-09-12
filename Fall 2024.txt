@@ -1,0 +1,83 @@
+// QUESTION 3: build_key
+    // ==========================================
+    static String build_key(CharNode root) {
+        // TODO: Write your implementation here
+        
+        return build_key_helper(root, 0);
+    }
+    static String build_key_helper(CharNode root, int level){
+        if(root == null){
+            return "";
+        }
+        if(root.left == null && root.right == null && level % 2 == 0){
+            return root.elem;
+        }
+        return build_key_helper(root.right, level+1) + build_key_helper(root.left, level+1);
+    }
+
+// QUESTION 4: cpu_scheduler
+    // ==========================================
+    static void cpu_scheduler(int[] tasks, int k) {
+        // TODO: Write your implementation here
+        MaxHeap h = new MaxHeap();
+        for(int i = 0; i < k; i++){
+            if(i<tasks.length){
+                h.insert(tasks[i]);
+            }
+        }
+        int count = 1;
+        while(h.isEmpty() != true){
+            System.out.println("Task "+count+" - Priority "+h.extract());
+            count++;
+        }
+    }
+
+// QUESTION 5: is_complete
+// ==========================================
+    static boolean is_complete(GraphEdge[] network) {
+        // TODO: Write your implementation here
+        int len = network.length;
+        int[][] arr = new int[len][len];
+        for(int i = 0; i < len; i++){
+            GraphEdge p = network[i];
+            while(p != null){
+                arr[i][Integer.parseInt(p.destination)]++;
+                p = p.next;
+            }
+        }
+        boolean ans = true;
+        for(int i = 0; i < len; i++){
+            for(int j = 0; j < len; j++){
+                if(i != j){
+                    if(arr[i][j] == 0){
+                        ans = false;
+                    }
+                }
+            }
+        }
+        return ans;
+    }      
+
+// QUESTION 6: getEncoding (Huffman Tree)
+// ==========================================
+
+    static String getEncoding(HuffmanNode root, String st) {
+        // TODO: Write your implementation here
+        String ans = "";
+        for(int i = 0; i < st.length(); i++){
+            String temp = st.charAt(i) + "";
+            ans += getEncodingHelper(root, temp, "");
+        }
+        return ans;
+    }
+    static String getEncodingHelper(HuffmanNode root, String target, String seq){
+        if(root == null){
+            return "";
+        }
+        if(root.left == null && root.right == null){
+            if(root.value.equals(target)){
+                return seq;
+            }
+        }
+        return getEncodingHelper(root.left, target, (seq+"0")) + getEncodingHelper(root.right, target, (seq+"1"));
+    }
